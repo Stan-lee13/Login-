@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neumorphic Login Page with Glowing Button</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #e0e0e0;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-card {
+      background: #e0e0e0;
+      border-radius: 20px;
+      box-shadow: 9px 9px 16px #bebebe, -9px -9px 16px #ffffff;
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+    }
+
+    .glowing-button {
+      position: relative;
+      display: inline-block;
+      padding: 12px 24px;
+      color: white;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #ff7676, #ff4d4d);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(255, 76, 76, 0.4);
+      overflow: hidden;
+    }
+
+    .glowing-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 120%;
+      height: 120%;
+      background: rgba(255, 255, 255, 0.5);
+      filter: blur(20px);
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: 0.5s;
+      animation: rotate-glow 3s linear infinite;
+    }
+
+    @keyframes rotate-glow {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+
+    .glowing-button:hover::before {
+      opacity: 1;
+      width: 140%;
+      height: 140%;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username">
+    <input type="password" placeholder="Password">
+    <button class="glowing-button">Login</button>
+  </div>
+</body>
+</html>
