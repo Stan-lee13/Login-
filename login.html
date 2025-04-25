@@ -3,40 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neumorphic Login Page with Glowing Button</title>
+  <title>Max-Enhanced Neumorphic Login</title>
   <style>
+    /* Animated background gradient layer */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, #d4fc79, #96e6a1, #ff7676, #ff4d4d);
+      background-size: 400% 400%;
+      animation: gradient-animation 15s ease infinite;
+      z-index: -3;
+    }
+
+    @keyframes gradient-animation {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Basic body styles */
     body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      background: #e0e0e0;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background: transparent; /* allows the animated gradient to shine */
     }
 
+    /* Particle canvas placed behind content */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -2;
+    }
+
+    /* Neumorphic login card with interactive hover tilt */
     .login-card {
       background: #e0e0e0;
       border-radius: 20px;
-      box-shadow: 9px 9px 16px #bebebe, -9px -9px 16px #ffffff;
-      padding: 20px;
-      width: 300px;
+      padding: 40px 30px;
+      width: 350px;
       text-align: center;
+      box-shadow: 12px 12px 24px #bebebe, -12px -12px 24px #ffffff;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
+    .login-card:hover {
+      transform: perspective(600px) rotateY(3deg) rotateX(3deg);
+      box-shadow: 16px 16px 32px #bebebe, -16px -16px 32px #ffffff;
+    }
+
+    h2 {
+      margin-bottom: 30px;
+      color: #444;
+      font-size: 28px;
+    }
+
+    /* Container for inputs */
+    .input-container {
+      position: relative;
+      margin: 20px 0;
+    }
+
+    /* Styled inputs with inset Neumorphism and focus effect */
     input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
+      padding: 12px 40px 12px 15px;
       border: none;
       border-radius: 10px;
+      font-size: 16px;
+      background: #e0e0e0;
       box-shadow: inset 5px 5px 10px #bebebe, inset -5px -5px 10px #ffffff;
+      transition: box-shadow 0.3s, transform 0.3s;
     }
 
+    input:focus {
+      outline: none;
+      box-shadow: 0 0 10px rgba(100, 100, 100, 0.3);
+      transform: scale(1.02);
+    }
+
+    /* The glowing button with enhanced animations and ripple effect */
     .glowing-button {
       position: relative;
       display: inline-block;
-      padding: 12px 24px;
+      padding: 14px 28px;
+      margin-top: 30px;
       color: white;
+      font-size: 16px;
       text-transform: uppercase;
       background: linear-gradient(90deg, #ff7676, #ff4d4d);
       border: none;
@@ -44,8 +107,19 @@
       cursor: pointer;
       box-shadow: 0 5px 15px rgba(255, 76, 76, 0.4);
       overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
 
+    .glowing-button:hover {
+      transform: scale(1.05);
+    }
+
+    .glowing-button:active {
+      transform: scale(0.95);
+      box-shadow: 0 0 25px rgba(255, 76, 76, 0.7);
+    }
+
+    /* Continuous rotating glow */
     .glowing-button::before {
       content: '';
       position: absolute;
@@ -56,32 +130,126 @@
       background: rgba(255, 255, 255, 0.5);
       filter: blur(20px);
       transform: translate(-50%, -50%) rotate(0deg);
-      transition: 0.5s;
       animation: rotate-glow 3s linear infinite;
     }
 
     @keyframes rotate-glow {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-      }
-      100% {
-        transform: translate(-50%, -50%) rotate(360deg);
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Ripple effect on button clicks */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 600ms linear;
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
       }
     }
 
-    .glowing-button:hover::before {
-      opacity: 1;
-      width: 140%;
-      height: 140%;
+    /* Responsive design tweaks */
+    @media (max-width: 400px) {
+      .login-card {
+        width: 90%;
+        padding: 30px 20px;
+      }
+      h2 {
+        font-size: 24px;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Particle canvas element -->
+  <canvas id="particle-canvas"></canvas>
+  
+  <!-- Neumorphic login card -->
   <div class="login-card">
     <h2>Login</h2>
-    <input type="text" placeholder="Username">
-    <input type="password" placeholder="Password">
+    <div class="input-container">
+      <input type="text" placeholder="Username" aria-label="Username">
+    </div>
+    <div class="input-container">
+      <input type="password" placeholder="Password" aria-label="Password">
+    </div>
     <button class="glowing-button">Login</button>
   </div>
+
+  <script>
+    /* Particle background animation using Canvas */
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    class Particle {
+      constructor(x, y, size, speedX, speedY) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.speedX = speedX;
+        this.speedY = speedY;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        // Bounce off canvas edges
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+      draw() {
+        ctx.fillStyle = "rgba(255, 255, 255, 0.7)";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    for (let i = 0; i < 100; i++) {
+      const size = Math.random() * 2 + 1;
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const speedX = (Math.random() - 0.5) * 1.5;
+      const speedY = (Math.random() - 0.5) * 1.5;
+      particles.push(new Particle(x, y, size, speedX, speedY));
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Add ripple effect on glowing button click
+    const glowingButton = document.querySelector('.glowing-button');
+    glowingButton.addEventListener('click', function(e) {
+      const rect = glowingButton.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const ripple = document.createElement('span');
+      ripple.classList.add('ripple');
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      glowingButton.appendChild(ripple);
+      setTimeout(() => { ripple.remove(); }, 600);
+    });
+  </script>
 </body>
 </html>
